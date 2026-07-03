@@ -1,0 +1,43 @@
+name: Build plugin
+
+on:
+  push:
+    branches: [ "**" ]
+    tags: [ "v*" ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build with Maven
+        run: mvn -B clean package
+
+      - name: Upload plugin jar as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AntiBrainrot-jar
+          path: target/AntiBrainrot.jar
+
+      # Если пуш был тегом вида v1.0.0 - дополнительно создаём Release
+      # и прикрепляем к нему готовый jar.
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/AntiBrainrot.jar

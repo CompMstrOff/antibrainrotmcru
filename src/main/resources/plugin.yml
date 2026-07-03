@@ -1,0 +1,17 @@
+name: AntiBrainrot
+version: '1.0.0'
+main: com.antibrainrot.AntiBrainrotPlugin
+api-version: '1.21'
+author: Claude
+description: Блокирует "six seven" / "67" / "сикс севен" в чате и высмеивает нарушителя
+
+commands:
+  antibrainrot:
+    description: Управление плагином Anti-Brainrot
+    usage: /antibrainrot reload
+    permission: antibrainrot.admin
+
+permissions:
+  antibrainrot.admin:
+    description: Позволяет перезагружать конфигурацию Anti-Brainrot
+    default: op
